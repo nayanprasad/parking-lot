@@ -1,4 +1,4 @@
-package com.parkinglot.domain.model.vehicle;
+package com.parkinglot.domain.enums;
 
 public enum VehicleType {
     CAR,

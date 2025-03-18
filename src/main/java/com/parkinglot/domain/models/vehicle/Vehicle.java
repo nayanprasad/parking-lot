@@ -1,6 +1,6 @@
-package com.parkinglot.domain.model.vehicle;
+package com.parkinglot.domain.models.vehicle;
 
-import lombok.AllArgsConstructor;
+import com.parkinglot.domain.enums.VehicleType;
 import lombok.Data;
 
 import java.util.UUID;

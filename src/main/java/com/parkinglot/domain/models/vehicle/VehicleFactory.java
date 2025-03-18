@@ -1,4 +1,6 @@
-package com.parkinglot.domain.model.vehicle;
+package com.parkinglot.domain.models.vehicle;
+
+import com.parkinglot.domain.enums.VehicleType;
 
 public class VehicleFactory {
     public static Vehicle createVehicle(VehicleType vehicleType, String licenceNumber) {
