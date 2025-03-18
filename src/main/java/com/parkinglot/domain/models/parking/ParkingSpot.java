@@ -24,7 +24,7 @@ public class ParkingSpot {
     }
 
     public boolean removeVehicle() {
-        this.isFree = false;
+        this.isFree = true;
         this.vehicle = null;
         return true;
     }

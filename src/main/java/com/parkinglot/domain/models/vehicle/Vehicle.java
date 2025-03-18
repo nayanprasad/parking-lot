@@ -15,4 +15,9 @@ public class Vehicle {
         this.licenseNumber = licenseNumber;
         this.vehicleType = vehicleType;
     }
+
+    public void assignTicket(UUID ticketId) {
+        this.ticketId = ticketId;
+    }
+
 }

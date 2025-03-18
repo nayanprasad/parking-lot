@@ -1,6 +1,10 @@
 package com.parkinglot.domain.models.parking;
 
+import com.parkinglot.domain.enums.PaymentMethod;
 import com.parkinglot.domain.enums.VehicleType;
+import com.parkinglot.domain.models.payment.ParkingReceipt;
+import com.parkinglot.domain.models.payment.ParkingTicket;
+import com.parkinglot.domain.models.vehicle.Vehicle;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -62,5 +66,31 @@ public class ParkingLot {
         return null;
     }
 
+    public ParkingTicket issueTicket(Vehicle vehicle) {
+        ParkingSpot parkingSpot = findAvailableSpot(vehicle.getVehicleType());
+
+        if (parkingSpot == null) {
+            throw new RuntimeException("No parking spot available for " + vehicle.getVehicleType());
+        }
+
+        parkingSpot.assignVehicle(vehicle);
+
+        ParkingTicket ticket = new ParkingTicket(UUID.randomUUID(), parkingSpot, vehicle);
+
+        return ticket;
+    }
+
+    public ParkingReceipt processTicket(ParkingTicket ticket, PaymentMethod paymentMethod) {
+        ticket.setAmount(100); //todo: update this according to the duration
+        ticket.markAsPaid();
+
+        ParkingSpot parkingSpot = ticket.getParkingSpot();
+        parkingSpot.removeVehicle();
+
+        ParkingReceipt parkingReceipt = new ParkingReceipt(UUID.randomUUID(), ticket, paymentMethod);
+
+
+        return parkingReceipt;
+    }
 
 }
