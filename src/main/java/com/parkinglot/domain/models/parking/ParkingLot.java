@@ -5,8 +5,10 @@ import com.parkinglot.domain.enums.VehicleType;
 import com.parkinglot.domain.models.payment.ParkingReceipt;
 import com.parkinglot.domain.models.payment.ParkingTicket;
 import com.parkinglot.domain.models.vehicle.Vehicle;
+import com.parkinglot.domain.strategy.IPricingStrategy;
 import lombok.Data;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +23,7 @@ public class ParkingLot {
     private List<ParkingFloor> parkingFloors;
     private List<Entrance> entrances;
     private List<Exit> exits;
+    private IPricingStrategy pricingStrategy;
 
     public ParkingLot() {
         this.parkingFloors = new ArrayList<>();
@@ -75,22 +78,25 @@ public class ParkingLot {
 
         parkingSpot.assignVehicle(vehicle);
 
-        ParkingTicket ticket = new ParkingTicket(UUID.randomUUID(), parkingSpot, vehicle);
-
-        return ticket;
+        return new ParkingTicket(UUID.randomUUID(), parkingSpot, vehicle);
     }
 
     public ParkingReceipt processTicket(ParkingTicket ticket, PaymentMethod paymentMethod) {
-        ticket.setAmount(100); //todo: update this according to the duration
+        Duration parkingDuration = ticket.getParkingDuration();
+        VehicleType vehicleType = ticket.getVehicle().getVehicleType();
+        double amount = pricingStrategy.calculatePrice(parkingDuration, vehicleType);
+        ticket.setAmount(amount);
+
         ticket.markAsPaid();
 
         ParkingSpot parkingSpot = ticket.getParkingSpot();
         parkingSpot.removeVehicle();
 
-        ParkingReceipt parkingReceipt = new ParkingReceipt(UUID.randomUUID(), ticket, paymentMethod);
+        for(ParkingFloor parkingFloor : parkingFloors) {
+            parkingFloor.updateDisplayBoard();
+        }
 
-
-        return parkingReceipt;
+        return new ParkingReceipt(UUID.randomUUID(), ticket, paymentMethod);
     }
 
 }

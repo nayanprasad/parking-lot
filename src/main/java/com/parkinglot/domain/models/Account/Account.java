@@ -1,7 +1,9 @@
 package com.parkinglot.domain.models.Account;
 
 import com.parkinglot.domain.enums.AccountStatus;
+import lombok.Data;
 
+@Data
 public class Account {
     private String username;
     private String password;

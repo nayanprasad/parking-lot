@@ -11,6 +11,7 @@ import com.parkinglot.domain.models.payment.ParkingReceipt;
 import com.parkinglot.domain.models.payment.ParkingTicket;
 import com.parkinglot.domain.models.vehicle.Vehicle;
 import com.parkinglot.domain.models.vehicle.VehicleFactory;
+import com.parkinglot.domain.strategy.HourlyPricingStrategy;
 
 import java.util.UUID;
 
@@ -46,6 +47,8 @@ public class Main {
         Exit exit2 = new Exit(UUID.randomUUID(), parkingLot);
         admin.addExit(parkingLot, exit1);
         admin.addExit(parkingLot, exit2);
+
+        parkingLot.setPricingStrategy(new HourlyPricingStrategy());
 
         Vehicle car1 = VehicleFactory.createVehicle(VehicleType.CAR, "ABC123");
         Vehicle motorcycle1 = VehicleFactory.createVehicle(VehicleType.MOTORCYCLE, "XYZ789");

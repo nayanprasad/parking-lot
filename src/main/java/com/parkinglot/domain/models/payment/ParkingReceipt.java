@@ -2,10 +2,12 @@ package com.parkinglot.domain.models.payment;
 
 import com.parkinglot.domain.enums.PaymentMethod;
 import com.parkinglot.domain.enums.PaymentStatus;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
 public class ParkingReceipt {
     private UUID id;
     private ParkingTicket parkingTicket;
