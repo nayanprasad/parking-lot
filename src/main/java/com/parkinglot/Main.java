@@ -11,6 +11,8 @@ import com.parkinglot.domain.models.payment.ParkingReceipt;
 import com.parkinglot.domain.models.payment.ParkingTicket;
 import com.parkinglot.domain.models.vehicle.Vehicle;
 import com.parkinglot.domain.models.vehicle.VehicleFactory;
+import com.parkinglot.domain.observer.EmailNotification;
+import com.parkinglot.domain.observer.ParkingLotAudit;
 import com.parkinglot.domain.strategy.HourlyPricingStrategy;
 
 import java.util.UUID;
@@ -23,6 +25,11 @@ public class Main {
 
         Person adminPerson = new Person("Admin User", "Admin Address", "admin@example.com", "123-456-7890");
         Admin admin = new Admin("admin", "password", adminPerson);
+
+        ParkingLotAudit audit = new ParkingLotAudit();
+        EmailNotification email = new EmailNotification();
+        parkingLot.addObserver(audit);
+        parkingLot.addObserver(email);
 
         ParkingFloor parkingFloor1 = new ParkingFloor("Floor 1");
 

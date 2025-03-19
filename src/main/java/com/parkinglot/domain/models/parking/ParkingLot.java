@@ -5,6 +5,7 @@ import com.parkinglot.domain.enums.VehicleType;
 import com.parkinglot.domain.models.payment.ParkingReceipt;
 import com.parkinglot.domain.models.payment.ParkingTicket;
 import com.parkinglot.domain.models.vehicle.Vehicle;
+import com.parkinglot.domain.observer.IParkingObserver;
 import com.parkinglot.domain.strategy.IPricingStrategy;
 import lombok.Data;
 
@@ -24,11 +25,13 @@ public class ParkingLot {
     private List<Entrance> entrances;
     private List<Exit> exits;
     private IPricingStrategy pricingStrategy;
+    private List<IParkingObserver> parkingObservers;
 
     public ParkingLot() {
         this.parkingFloors = new ArrayList<>();
         this.entrances = new ArrayList<>();
         this.exits = new ArrayList<>();
+        this.parkingObservers = new ArrayList<>();
     }
 
     public static ParkingLot getInstance() {
@@ -58,6 +61,21 @@ public class ParkingLot {
         return true;
     }
 
+    public boolean addObserver(IParkingObserver parkingObserver) {
+        this.parkingObservers.add(parkingObserver);
+        return true;
+    }
+
+    public boolean removeObserver(IParkingObserver parkingObserver) {
+        return this.parkingObservers.remove(parkingObserver);
+    }
+
+    public void notifyObservers(String message) {
+        for(IParkingObserver observer : parkingObservers) {
+            observer.update(message);
+        }
+    }
+
 
     public ParkingSpot findAvailableSpot(VehicleType vehicleType) {
         for(ParkingFloor parkingFloor : parkingFloors) {
@@ -78,7 +96,11 @@ public class ParkingLot {
 
         parkingSpot.assignVehicle(vehicle);
 
-        return new ParkingTicket(UUID.randomUUID(), parkingSpot, vehicle);
+        ParkingTicket ticket = new ParkingTicket(UUID.randomUUID(), parkingSpot, vehicle);;
+
+        notifyObservers("Ticket issued: " + ticket.getId() + " for vehicle: " + vehicle.getLicenseNumber());
+
+        return ticket;
     }
 
     public ParkingReceipt processTicket(ParkingTicket ticket, PaymentMethod paymentMethod) {
@@ -91,6 +113,9 @@ public class ParkingLot {
 
         ParkingSpot parkingSpot = ticket.getParkingSpot();
         parkingSpot.removeVehicle();
+
+        notifyObservers("Payment processed: " + ticket.getId() + " amount: $" + amount);
+
 
         for(ParkingFloor parkingFloor : parkingFloors) {
             parkingFloor.updateDisplayBoard();
