@@ -14,7 +14,6 @@ A thread-safe parking lot management system simulating a multi-level facility. I
 - **Observer Pattern**: Email notifications, audit logs.
 - **Admin Controls**: Manage parking infrastructure.
 - **Concurrency Handling**: Efficient multi-threading.
-- **Multi-Currency Support**: Payment in different currencies.
 
 ## Technical Architecture
 Built with Java using:
@@ -30,7 +29,6 @@ Built with Java using:
 - **Vehicles**: Abstract class with specific types.
 - **Payment System**: Tickets, Receipts, Money class.
 - **Concurrency Management**: Locks, thread-safe collections.
-- **Currency System**: Multi-currency payments, conversions.
 
 ## Concurrency Handling
 - **Thread-safe Collections**: CopyOnWriteArrayList.
@@ -50,7 +48,6 @@ Built with Java using:
 ## Requirements
 - Java 17+
 - Maven
-- Lombok
 
 ## Running the Project
 ```bash
@@ -66,5 +63,4 @@ java -jar target/ParkingLot-1.0-SNAPSHOT.jar
 - Advanced reporting & analytics
 - Parking spot reservations
 - Load balancing for high traffic
-- Multi-location support
 
